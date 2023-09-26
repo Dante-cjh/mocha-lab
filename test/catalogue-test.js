@@ -93,5 +93,26 @@ describe("Catalogue", () => {
       let rejectedProduct = cat.findProductById("A126");
       expect(rejectedProduct).to.be.undefined; 
     });
+    describe("search", () => {
+        beforeEach(function () {
+            cat = new Catalogue("Test Catalogue");
+            cat.addProduct(new Product("C123", "shoes", 100, 10, 25.0));
+            cat.addProduct(new Product("C124", "shoulder bag", 100, 10, 10.0));
+            cat.addProduct(new Product("C125", "book", 100, 10, 30.0));
+        });
+        it("returns the products whose price is less than (or equal to) the specified value", () => {
+            const result = cat.search({price: 25.00});
+            expect(result).to.have.lengthOf(2);
+            expect(result).to.have.members(["C123", "C124"]);
+        });
+        it("returns the products with the keyword in their name when they fits keyword", () => {
+            const result = cat.search({keyword: 'sho'})
+            expect(result).to.have.lengthOf(2);
+            expect(result[0].name).to.equal("shoes");
+        });
+        it("returns an exception 'Bad search' if the criteria object has neither key", () => {
+            expect(() => cat.search('dante')).to.throw("Bad Batch");
+        });
+    })
   });
 });

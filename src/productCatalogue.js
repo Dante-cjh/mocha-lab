@@ -51,5 +51,26 @@ class Catalogue {
       .reduce((acc, p) => acc + 1, 0);
     return noProductsAdded;
   }
+
+  search(criteria){
+    let items = {};
+    if (typeof criteria != "object"){
+      throw new Error("Bad Batch");
+    }
+    if(Object.keys(criteria)[0] == "price"){
+      items = this.products.filter((item) => {
+        return item.price <= criteria["price"]
+      }).map((product) => {
+        return product.id;
+      })
+    }
+    if(Object.keys(criteria)[0] == "keyword"){
+      items = this.products.filter((item) => {
+        return item.name.search("sho") != -1;
+      })
+    }
+    console.log(items)
+    return items
+  }
 }
 module.exports = Catalogue;
